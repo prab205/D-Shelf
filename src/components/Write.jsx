@@ -13,11 +13,15 @@ import { ethers } from "ethers"
 import { create as ipfsHttpClient } from 'ipfs-http-client'
 import Web3Modal from 'web3modal'
 
+<<<<<<< HEAD
 const client = ipfsHttpClient('https://ipfs.infura.io.5001/api/v0')
 
 const Write = (props) => {
 
   // const [fileUrl setFileUrl ] = use
+=======
+const Write = (props) => {
+>>>>>>> b8ab3c6f00ca2a7ba908017a3a03eb3267568a94
   const classes = useStyles();
 
   const [image, setImage] = useState(null);
