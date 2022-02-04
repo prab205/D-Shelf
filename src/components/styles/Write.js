@@ -7,6 +7,7 @@ const useStyles = makeStyles((theme) => ({
     },
     writePageContent: {
         marginTop: "110px",
+        paddingTop: "50px",
         "& p": {
             fontFamily: "Rubik, sans-serif",
             fontSize: "3.2rem",

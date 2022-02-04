@@ -22,9 +22,11 @@ function App() {
   const [userBalance, setUserBalance] = useState(null);
   const [connButtonText, setConnButtonText] = useState('Connect Wallet');
   const [provider, setProvider] = useState(null);
+	const [signer, setSigner] = useState(null);
   const [contract, setContract] = useState(null);
+  
   const ConnectWalletHandler = async () => {
-    if (window.ethereum && defaultAccount == null) {
+    if (window.ethereum && window.ethereum.isMetaMask) {
       // set ethers provider
       setProvider(new ethers.providers.Web3Provider(window.ethereum));
 
@@ -32,30 +34,49 @@ function App() {
       window.ethereum.request({ method: 'eth_requestAccounts'})
       .then(result => {
         setConnButtonText('Wallet Connected');
-        setDefaultAccount(result[0]);
+        accountChangedHandler(result[0]);
       })
       .catch(error => {
         setErrorMessage(error.message);
       });
 
-    } else if (!window.ethereum){
+    } else {
       console.log('Need to install MetaMask');
       setErrorMessage('Please install MetaMask browser extension to interact');
     }
-
-    let signer = await (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
-    const contract = new ethers.Contract("0xEA9E8318328314519dfeFc00222352B63349Ba2b", bookAbi, signer)
-    console.log(contract)
-
-    contract.connect(defaultAccount) 
-
-
-    console.log("Tokens:",await contract.getContentIndexByID(3))
-    setContract(contract)
   }
 
+  // update account, will cause component re-render
+	const accountChangedHandler = (newAccount) => {
+		setDefaultAccount(newAccount);
+		updateEthers();
+	}
+
+	const chainChangedHandler = () => {
+		// reload the page to avoid any errors with chain change mid use of application
+		window.location.reload();
+	}
+
+
+	// listen for account changes
+	window.ethereum.on('accountsChanged', accountChangedHandler);
+
+	window.ethereum.on('chainChanged', chainChangedHandler);
+
+	const updateEthers = () => {
+		let tempProvider = new ethers.providers.Web3Provider(window.ethereum);
+		setProvider(tempProvider);
+
+		let tempSigner = tempProvider.getSigner();
+		setSigner(tempSigner);
+
+		let tempContract = new ethers.Contract(bookContractAddr, bookABI, tempSigner);
+		setContract(tempContract);	
+	}
+
+
+
   const getUserCollections=()=>{
-    console.log(contract.methods.getTokensOwnedByUser())
   }
 
   useEffect(() => {
@@ -78,20 +99,29 @@ function App() {
       />
       <Routes>
         <Route exact path="/" element={<Home 
-        contract = {contract}
-        />}></Route>
-        <Route path="/MarketPlace" element={<MarketPlace 
-        contract = {contract}
-        />}></Route>
-        <Route path="/myCollections" element={<Collections 
-        contract = {contract}
-        />}></Route>
-        <Route exact path="/write" element={<Write 
-        contract = {contract}
-        />}></Route>
-        <Route exact path="/singlePage" element={<SinglePage 
-        contract = {contract}
-        />}></Route>
+        Contract = {contract}
+        />}>
+        </Route>
+        <Route path="/MarketPlace" element={<MarketPlace
+        Contract = {contract}
+        />}>
+
+        </Route>
+        <Route path="/myCollections" element={<Collections
+        Contract = {contract}
+        />}>
+
+        </Route>
+        <Route exact path="/write" element={<Write
+        Contract = {contract} 
+        />}>
+
+        </Route>
+        <Route exact path="/singlePage" element={<SinglePage
+        Contract = {contract} 
+        />}>
+
+        </Route>
       </Routes>
     </div>
   );

@@ -84,7 +84,7 @@ const Header = (props) => {
                   <div className='balanceDisplay'>
                     <h3>Balance: {props.userBalance}</h3>
                   </div>
-                  {props.errorMessage}
+                  {/* {props.errorMessage} */}
               </div>
             </Toolbar>
           </Box>
