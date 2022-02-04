@@ -14,7 +14,7 @@ function WriteCopies({ title, color }) {
         {title}
       </Typography>
       <div className={classes.money}>
-        <TextField
+        {/* <TextField
           id='price'
           label='Enter Price'
           variant='outlined'
@@ -25,7 +25,7 @@ function WriteCopies({ title, color }) {
               <InputAdornment position='start'>ETH</InputAdornment>
             ),
           }}
-        />
+        /> */}
         <TextField
           id='number'
           label='Number of Copies'

@@ -8,7 +8,12 @@ import MarketPlace from '../components/MarketPlace';
 import Collections from '../components/Collections';
 import SinglePage from '../components/SinglePage';
 import {ethers} from 'ethers'
+import axios from 'axios'
+import Web3Modal from 'web3modal'
+import bookABI from '../contracts/book.sol/book.json'
+import bookmarketABI from '../contracts/bookmarket.sol/bookmarket.json'
 
+import { bookContractAddr, bookmarketContractAddr } from '../config'
 
 function App() {
 
@@ -60,7 +65,14 @@ function App() {
         <Route exact path="/" element={<Home />}></Route>
         <Route path="/MarketPlace" element={<MarketPlace />}></Route>
         <Route path="/myCollections" element={<Collections />}></Route>
-        <Route exact path="/write" element={<Write />}></Route>
+        <Route exact path="/write" element={<Write
+        userAccount={defaultAccount} 
+        bookABI={bookABI}
+        bookContractAddr = {bookContractAddr}
+        bookmarketABI={bookmarketABI}
+        bookmarketContractAddr = {bookmarketContractAddr}
+        ConnectWalletHandler = {ConnectWalletHandler}
+        />}></Route>
         <Route exact path="/singlePage" element={<SinglePage />}></Route>
       </Routes>
     </div>

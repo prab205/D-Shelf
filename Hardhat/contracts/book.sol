@@ -131,10 +131,13 @@ contract book is ERC721URIStorage {
         }
         content.authorAddr=msg.sender;
         content.tokenIds=tokenIdsGold;
+        content.tokenType=TokenType.GOLD;
         contents.push(content);
         content.tokenIds=tokenIdsSilver;
+        content.tokenType=TokenType.SILVER;
         contents.push(content);
         content.tokenIds=tokenIdsBronze;
+        content.tokenType=TokenType.BRONZE;
         contents.push(content);
     }
 
